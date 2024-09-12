@@ -2,10 +2,29 @@
 
 
 def equiv_to(a, m, low, high):
-    k_low = low  # wrong; replace 'low' with the correct value
-    k_high = high  # wrong; replace 'high' the correct value
+    """
+    Returns a list of all integer values x where x is congruent to
+    a mod m, within a desired range restriction.
+
+    Parameters:
+        'a' : var in definition of congruence a (mod m)
+        'm' : var in definition of congruence a (mod m)
+        low : inclusive lower bound of inequality restricting range of x_vals
+        high: inclusive upper bound of inequlaity restricting range of x_vals
+
+    Returns:
+        x_vals : a list containing all values satisifying range(low, high) such
+                that x congruent a (mod m) 
+    """
+    # Generic form of low and high k inequalities
+    k_low = (low-a) // m
+    k_high = (high-a) // m  
+    
     k_vals = list(range(k_low, k_high + 1))
-    x_vals = "FIXME: initialize x_vals"
+    x_vals = []
+    for k in k_vals:
+        x = m * k + a
+        x_vals.append(x)
     return x_vals
 
 
