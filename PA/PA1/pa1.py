@@ -32,16 +32,35 @@ def equiv_to(a, m, low, high):
 
 
 def b_rep(n, b):
+    """
+    Returns a string representing the 'n' decimal base number in 'b' base.
+
+    Parameters:
+        'n' :   decimal number
+        'b' :   base to convert to
+
+    Returns:
+        result : string
+    """
+    
     digits = []  # stores the digits of the b-representation of n
     q = n
+    # loop breaks when quotient = 0
     while q != 0:
-        digit = "FIXME: update 'digit' to be the remainder of q divided by b"
+        digit = q % b
+        # if base is hex and greater than 10
         if b == 16 and digit > 9:
             hex_dict = {10: 'A', 11: 'B', 12: 'C', 13: 'D', 14: 'E', 15: 'F'}
-            # FIXME: Update digit = ...
+            digit = hex_dict[digit]
         digits.append(digit)
-        q = "FIXME: update q to the correct value."
-    return  # FIXME: Return the string of digits
+        # new quotient is int portion of b divides q
+        q = q // b
+    # after loop, reverse the list
+    digits.reverse()    
+    # map(str, digits) applies str function to each element in strings and 
+    #''.join joins the string together without spacing and stores it in result
+    result = ''.join(map(str, digits))
+    return result
 
 
 """ ---------------- PROBLEM 3 ----------------"""
@@ -67,11 +86,17 @@ def binary_add(a, b):
         a_i = int(a[i])
         b_i = int(b[i])
 
-        # FIXME: Update result += ....
-        # FIXME: Update carry =
+        # get sum of ints
+        s_i = a_i + b_i + carry
+        # perform mod arithmetic, convert to string, concatenate to result
+        result += str(s_i % 2) 
+        # carry is bit
+        carry = s_i  // 2
+
+    # if there is a leftover carry bit, append to result    
     if carry == 1:
-        result += "FIXME: Update 'result' to the correct value."
-    return  # FIXME return the appropriate string
+        result += '1'
+    return  result.reverse()
 
 
 """ ---------------- PROBLEM 4 ----------------"""
