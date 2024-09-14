@@ -60,7 +60,7 @@ def b_rep(n, b):
     # map(str, digits) applies str function to each element in strings and 
     #''.join joins the string together without spacing and stores it in result
     result = ''.join(map(str, digits))
-    return result
+    return result[::-1]
 
 
 """ ---------------- PROBLEM 3 ----------------"""
@@ -96,7 +96,8 @@ def binary_add(a, b):
     # if there is a leftover carry bit, append to result    
     if carry == 1:
         result += '1'
-    return  result.reverse()
+    # technically need to reverse the string to obtain correct result?
+    return  result
 
 
 """ ---------------- PROBLEM 4 ----------------"""
