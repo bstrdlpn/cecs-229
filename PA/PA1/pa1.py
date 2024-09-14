@@ -60,7 +60,7 @@ def b_rep(n, b):
     # map(str, digits) applies str function to each element in strings and 
     #''.join joins the string together without spacing and stores it in result
     result = ''.join(map(str, digits))
-    return result[::-1]
+    return result
 
 
 """ ---------------- PROBLEM 3 ----------------"""
@@ -90,14 +90,14 @@ def binary_add(a, b):
         s_i = a_i + b_i + carry
         # perform mod arithmetic, convert to string, concatenate to result
         result += str(s_i % 2) 
-        # carry is bit
+        # carry is leftover bit obtained by floor div
         carry = s_i  // 2
 
     # if there is a leftover carry bit, append to result    
     if carry == 1:
         result += '1'
     # technically need to reverse the string to obtain correct result?
-    return  result
+    return result[::-1]
 
 
 """ ---------------- PROBLEM 4 ----------------"""
@@ -111,13 +111,15 @@ def binary_mul(a, b):
     # multiplication algorithm
     partial_products = []
     i = 0  # index of the current bit of string 'a' beginning at 0, right-to-left
-    for bit in reversed(a):
+    for bit in reversed(b):
         if bit == '1':
-            partial_products.append("FIXME: Append the appropriate partial product")
+            # partial product x is binary representation a followed by i-th index zeroes
+            x = a + i * '0'
+            partial_products.append(x)
         i += 1
 
     result = '0'
     while len(partial_products) > 0:
-        result = binary_add("FIXME: Input the correct arguments")
+        result = binary_add(result, partial_products[0])
         del partial_products[0]
-    return  # FIXME: Return the appropriate result
+    return  result
