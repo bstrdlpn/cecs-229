@@ -24,7 +24,8 @@ def equiv_to(a, m, low, high):
     x_vals = []
     for k in k_vals:
         x = m * k + a
-        x_vals.append(x)
+        if low <= x <= high:
+            x_vals.append(x)
     return x_vals
 
 
