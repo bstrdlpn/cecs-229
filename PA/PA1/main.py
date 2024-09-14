@@ -98,6 +98,7 @@ def main():
       a = random.randint(4, 10)
       b = random.randint(2, 10)
 
+      # returns 0b+binary rep string to variable, strips out 0b prefix
       a2 = bin(a)[2:]
       b2 = bin(b)[2:]
 
