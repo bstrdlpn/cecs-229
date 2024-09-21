@@ -40,7 +40,7 @@ Given that a number $n$ can be represented as $n=d_k\cdot b^k + d_{k-1}\cdot b^{
 So as an example:
 For $n = 10$ and base $b = 8$:
 1. $10\mod 8=2$ (so, $d_0=2$)
-2. $1\mod 8=1 (so, $d_1=1$)
+2. $1 \mod 8=1 (so, $d_1=1$)
 
 Thus yielding the number $(12)_8$. Going by how numbers can be represented as powers of base b:
 
