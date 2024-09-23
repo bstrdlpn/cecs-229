@@ -17,11 +17,11 @@ def primes(a, b):
 
   # FIXME: initialize `stop` which is the stopping criteria for
   #        the loop in the Sieve of Eratosthenes
-  stop = "FIXME: Replace this string"
+  stop = int(pow(b, 0.5))
 
   # FIXME: initialize a Python set called `P` that contains
   #        all integers in the range [a, b]
-  P = set("FIXME: Replace this string")
+  P = set(x for x in range(a, b + 1))
 
   for x in range(2, stop):
 
