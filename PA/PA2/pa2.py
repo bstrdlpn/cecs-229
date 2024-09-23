@@ -21,7 +21,7 @@ def primes(a, b):
 
   # FIXME: initialize a Python set called `P` that contains
   #        all integers in the range [a, b]
-  P = set(x for x in range(a, b))
+  P = set(x for x in range(a,(b+1)))
 
   for x in range(2, stop):
     
@@ -30,7 +30,7 @@ def primes(a, b):
     # HINT: the set of multiples of x can be expressed as
     #       k * x, where k is an integer; hence the comprehension
     #       should loop over values that satisfy k * x <= b
-    multiples_x = set(x * n for n in range(a // x, (b // x) + 1) if x * n <= b)
+    multiples_x ={x * n for n in range(a // x, (b // x) + 1) if x * n <= b and x * n != x}
 
     P -= multiples_x  # removing the multiples of x from the set P
 
