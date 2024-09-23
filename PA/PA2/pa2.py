@@ -17,20 +17,20 @@ def primes(a, b):
 
   # FIXME: initialize `stop` which is the stopping criteria for
   #        the loop in the Sieve of Eratosthenes
-  stop = int(pow(b, 0.5))
+  stop = int(pow(b, 0.5) + 1)
 
   # FIXME: initialize a Python set called `P` that contains
   #        all integers in the range [a, b]
-  P = set(x for x in range(a, b + 1))
+  P = set(x for x in range(a, b))
 
   for x in range(2, stop):
-
+    
     # FIXME: use Python list comprehension to create a set
     #        of multiples of x in the range [2, b];
     # HINT: the set of multiples of x can be expressed as
     #       k * x, where k is an integer; hence the comprehension
     #       should loop over values that satisfy k * x <= b
-    multiples_x = set("FIXME: replace this string")
+    multiples_x = set(x * n for n in range(a // x, (b // x) + 1) if x * n <= b)
 
     P -= multiples_x  # removing the multiples of x from the set P
 
