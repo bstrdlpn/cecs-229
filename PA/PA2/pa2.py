@@ -51,7 +51,7 @@ def bezout_coeffs(a, b):
     if a < 0 or b < 0:
         raise ValueError(
         f"bezout_coeffs(a, b) does not support negative arguments.")
-    s0 = 0
+    s0 = 1
     t0 = 0
     s1 = -1 * (b // a)
     t1 = 1
@@ -64,22 +64,22 @@ def bezout_coeffs(a, b):
         temp_s = s1
         temp_t = t1
 
-    # Update s1 according to the formula for sk
-    s1 = s0 - temp_s * (bk // ak)
+        # Update s1 according to the formula for sk
+        s1 = s0 - temp_s * (bk // ak)
 
-    # Update t1 according to the formula for tk
-    t1 = t0 - temp_t * (bk // ak)
+        # Update t1 according to the formula for tk
+        t1 = t0 - temp_t * (bk // ak)
 
-    s0 = temp_s
-    t0 = temp_t
-    temp = bk
+        s0 = temp_s
+        t0 = temp_t
+        temp = bk
 
-    # Update bk and ak
-    bk = "FIXME: Replace this string"
-    ak = "FIXME: Replace this string"
+        # Update bk and ak
+        bk = ak
+        ak = temp % bk
 
-  # FIXME: Replace each string with the correct coefficients of a and b
-    return {a: "FIXME: replace this string", b: "FIXME: replace this string"}
+  # Replace each string with the correct coefficients of a and b
+    return {a: temp_s, b: temp_t}
 
 
 """ ----------------- PROBLEM 3 ----------------- """
