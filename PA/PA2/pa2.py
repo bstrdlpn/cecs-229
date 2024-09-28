@@ -79,6 +79,7 @@ def bezout_coeffs(a, b):
         ak = temp % bk
 
   # Replace each string with the correct coefficients of a and b
+  # returns a dictionary -- for next problem
     return {a: temp_s, b: temp_t}
 
 
@@ -95,9 +96,10 @@ def gcd(a, b):
   A = abs(a)
   B = abs(b)
   if A == B:
-    pass  # FIXME: replace this pass with the correct return value
+    return A
   bez = bezout_coeffs(A, B)
-  return  # FIXME: replace this pass with the correct return value
+  # gcd(A, B) = s_k * A + t_k * B
+  return  sum(key * value for key, value in bez.items())
 
 
 """ ----------------- PROBLEM 4 ----------------- """
