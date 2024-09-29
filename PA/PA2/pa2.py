@@ -2,85 +2,85 @@
 
 
 def primes(a, b):
-  """
-      prints all primes in the range [a, b]
-      :param a: int type; a positive integer greater than 1
-      :param b: int type; a positive integer greater than or equal to a.
-      :return: set type; a set of all primes in the range [a, b]
-      :raises ValueError if a < 1 or b < a
-      """
-  if a < 1 or b < a:  # handling invalid range
-    raise ValueError("Invalid range given")
+    """
+    prints all primes in the range [a, b]
+    :param a: int type; a positive integer greater than 1
+    :param b: int type; a positive integer greater than or equal to a.
+    :return: set type; a set of all primes in the range [a, b]
+    :raises ValueError if a < 1 or b < a
+    """
+    if a < 1 or b < a:  # handling invalid range
+      raise ValueError("Invalid range given")
 
-  if a == 1:  # handling starting point a = 1
-    a = 2  # this ensures 1 is not listed as a prime
+    if a == 1:  # handling starting point a = 1
+      a = 2  # this ensures 1 is not listed as a prime
 
-  # FIXME: initialize `stop` which is the stopping criteria for
-  #        the loop in the Sieve of Eratosthenes
-  stop = int(pow(b, 0.5) + 1)
+    # FIXME: initialize `stop` which is the stopping criteria for
+    #        the loop in the Sieve of Eratosthenes
+    stop = int(pow(b, 0.5) + 1)
 
-  # FIXME: initialize a Python set called `P` that contains
-  #        all integers in the range [a, b]
-  P = set(x for x in range(a,(b+1)))
+    # FIXME: initialize a Python set called `P` that contains
+    #        all integers in the range [a, b]
+    P = set(x for x in range(a,(b+1)))
 
-  for x in range(2, stop):
-    
-    # FIXME: use Python list comprehension to create a set
-    #        of multiples of x in the range [2, b];
-    # HINT: the set of multiples of x can be expressed as
-    #       k * x, where k is an integer; hence the comprehension
-    #       should loop over values that satisfy k * x <= b
-    multiples_x ={x * n for n in range(a // x, (b // x) + 1) if x * n <= b and x * n != x}
+    for x in range(2, stop):
+      # FIXME: use Python list comprehension to create a set
+      #        of multiples of x in the range [2, b];
+      # HINT: the set of multiples of x can be expressed as
+      #       k * x, where k is an integer; hence the comprehension
+      #       should loop over values that satisfy k * x <= b
+        multiples_x ={x * n for n in range(a // x, (b // x) + 1) if x * n <= b and x * n != x}
 
-    P -= multiples_x  # removing the multiples of x from the set P
+        P -= multiples_x  # removing the multiples of x from the set P
 
-  return P
+    return P
 
 
 """ ----------------- PROBLEM 2 ----------------- """
 
 
 def bezout_coeffs(a, b):
-  """
-      computes the Bezout coefficients of two given positive integers
-      :param a: int type; positive integer
-      :param b: int type; positive integer
-      :returns: dict type; a dictionary with parameters a and b as keys,
-                and their corresponding Bezout coefficients as values.
-      :raises: ValueError if a < 0 or b < 0
-      """
-  if a < 0 or b < 0:
-    raise ValueError(
-      f"bezout_coeffs(a, b) does not support negative arguments.")
-  s0 = 1
-  t0 = 0
-  s1 = -1 * (b // a)
-  t1 = 1
+    """
+    computes the Bezout coefficients of two given positive integers
+    :param a: int type; positive integer
+    :param b: int type; positive integer
+    :returns: dict type; a dictionary with parameters a and b as keys,
+              and their corresponding Bezout coefficients as values.
+    :raises: ValueError if a < 0 or b < 0
+    """
+    if a < 0 or b < 0:
+        raise ValueError(
+        f"bezout_coeffs(a, b) does not support negative arguments.")
+    s0 = 1
+    t0 = 0
+    s1 = -1 * (b // a)
+    t1 = 1
 
-  temp = b
-  bk = a
-  ak = temp % a
+    temp = b
+    bk = a
+    ak = temp % a
 
-  while ak != 0:
-    temp_s = s1
-    temp_t = t1
+    while ak != 0:
+        temp_s = s1
+        temp_t = t1
 
-    # FIXME: Update s1 according to the formula for sk
-    s1 = "FIXME: Replace this string"
+        # Update s1 according to the formula for sk
+        s1 = s0 - temp_s * (bk // ak)
 
-    # FIXME: Update t1 according to the formula for tk
-    t1 = "FIXME: Replace this string"
+        # Update t1 according to the formula for tk
+        t1 = t0 - temp_t * (bk // ak)
 
-    s0 = temp_s
-    t0 = temp_t
-    temp = bk
+        s0 = temp_s
+        t0 = temp_t
+        temp = bk
 
-    # FIXME: Update bk and ak
-    bk = "FIXME: Replace this string"
-    ak = "FIXME: Replace this string"
+        # Update bk and ak
+        bk = ak
+        ak = temp % bk
 
-  # FIXME: Replace each string with the correct coefficients of a and b
-  return {a: "FIXME: replace this string", b: "FIXME: replace this string"}
+  # Replace each string with the correct coefficients of a and b
+  # returns a dictionary -- for next problem
+    return {a: s0, b: t0}
 
 
 """ ----------------- PROBLEM 3 ----------------- """
@@ -96,9 +96,10 @@ def gcd(a, b):
   A = abs(a)
   B = abs(b)
   if A == B:
-    pass  # FIXME: replace this pass with the correct return value
+    return A
   bez = bezout_coeffs(A, B)
-  return  # FIXME: replace this pass with the correct return value
+  # gcd(A, B) = s_k * A + t_k * B
+  return  sum(key * value for key, value in bez.items())
 
 
 """ ----------------- PROBLEM 4 ----------------- """
@@ -121,14 +122,15 @@ def mod_inv(a, m):
     )
   A = a
   while A < 0:
+    # A is in range [0, m) and is equivalent to a under modulo m
+    A += m
 
-    A += """FIXME: replace this string so that by the end of the loop, A is in range [0, m) and is equivalent to a under modulo m"""
-
-  inverse = """FIXME: replace this string with the inverse of a under modulo m"""
+  # inverse of a under modulo m
+  inverse = bezout_coeffs(A, m).get(A)
 
   while inverse < 0:
 
-    inverse += """FIXME: replace this string so that by the end of the loop, the inverse is in range [0, m)"""
+    inverse += m
 
   return inverse
 
@@ -156,10 +158,13 @@ def solve_mod_equiv(a, b, m, low, high):
     raise ValueError(
       f"solve_mod_equiv() does not support negative modulo m = {m}")
   a_inv = mod_inv(a, m)
+  
+  # correct lower bound
+  k_low = (low - a_inv * b) // m
 
-  k_low = """FIXME: replace this string with the correct lower bound for k, if x = mk + a_inv * b is a solution in the range [low, high]"""
+  # correct upper bound
+  k_high = (high - a_inv * b) // m
 
-  k_high = """FIXME: replace this string with the correct upper bound for k, if x = mk + a_inv * b is a solution in the range [low, high]"""
-
-  x = """FIXME: replace this string with the Python list comprehension that uses x = mk + a_inv * b to generate all solutions to ax ~ b (mod m) in the range [low, high]"""
+  # list comprehension using x = mk + a_inv all solutions within bounds
+  x = [m * k +a_inv * b for k in range(k_low, k_high + 1) if low <= m * k +a_inv * b <= high]
   return set(x)
