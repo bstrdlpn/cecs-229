@@ -80,7 +80,7 @@ def bezout_coeffs(a, b):
 
   # Replace each string with the correct coefficients of a and b
   # returns a dictionary -- for next problem
-    return {a: temp_s, b: temp_t}
+    return {a: s0, b: t0}
 
 
 """ ----------------- PROBLEM 3 ----------------- """
@@ -158,10 +158,13 @@ def solve_mod_equiv(a, b, m, low, high):
     raise ValueError(
       f"solve_mod_equiv() does not support negative modulo m = {m}")
   a_inv = mod_inv(a, m)
+  
+  # correct lower bound
+  k_low = (low - a_inv * b) // m
 
-  k_low = """FIXME: replace this string with the correct lower bound for k, if x = mk + a_inv * b is a solution in the range [low, high]"""
+  # correct upper bound
+  k_high = (high - a_inv * b) // m
 
-  k_high = """FIXME: replace this string with the correct upper bound for k, if x = mk + a_inv * b is a solution in the range [low, high]"""
-
-  x = """FIXME: replace this string with the Python list comprehension that uses x = mk + a_inv * b to generate all solutions to ax ~ b (mod m) in the range [low, high]"""
+  # list comprehension using x = mk + a_inv all solutions within bounds
+  x = [m * k +a_inv * b for k in range(k_low, k_high + 1) if low <= m * k +a_inv * b <= high]
   return set(x)
