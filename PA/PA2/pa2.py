@@ -122,14 +122,15 @@ def mod_inv(a, m):
     )
   A = a
   while A < 0:
+    # A is in range [0, m) and is equivalent to a under modulo m
+    A += m
 
-    A += """FIXME: replace this string so that by the end of the loop, A is in range [0, m) and is equivalent to a under modulo m"""
-
-  inverse = """FIXME: replace this string with the inverse of a under modulo m"""
+  # inverse of a under modulo m
+  inverse = bezout_coeffs(A, m).get(A)
 
   while inverse < 0:
 
-    inverse += """FIXME: replace this string so that by the end of the loop, the inverse is in range [0, m)"""
+    inverse += m
 
   return inverse
 
