@@ -1,3 +1,4 @@
+import util
 """ ----------------- PROBLEM 1 ----------------- """
 
 
@@ -16,24 +17,26 @@ def affine_encrypt(text, a, b):
     cipher = ""
     for letter in text:
         if letter.isalpha():
-        # FIXME: Use util.py to initialize 'num' to be
-        # the integer corresponding to the current letter
-        num = None
+            # FIXME: Use util.py to initialize 'num' to be
+            # the integer corresponding to the current letter
+            num = util.letters2digits(letter)
 
-        # FIXME: Encrypt the current 'num' using the
-        # affine transformation with key (a, b).
-        # Store the result in cipher_digits.
-        cipher_digits = 'None'
+            # FIXME: Encrypt the current 'num' using the
+            # affine transformation with key (a, b).
+            # Store the result in cipher_digits.
+            num = (a*int(num) + b) % 26
+    
+            cipher_digits = str(num)
 
-        if len(cipher_digits) == 1:
-            # FIXME: If the cipherdigit is 0 - 9,
-            # prepend the string with a 0
-            # to make it a two-digit number
-            cipher_digits = None
+            if len(cipher_digits) == 1:
+                # FIXME: If the cipherdigit is 0 - 9,
+                # prepend the string with a 0
+                # to make it a two-digit number
+                cipher_digits = '0' + cipher_digits
 
-        # FIXME: Use util.py to append to the cipher the ENCRYPTED letter
-        # corresponding to the current cipher digits
-        cipher += 'None'
+            # FIXME: Use util.py to append to the cipher the ENCRYPTED letter
+            # corresponding to the current cipher digits
+            cipher += util.digits2letters(cipher_digits)
 
     return cipher
 
@@ -55,26 +58,26 @@ def affine_decrypt(ciphertext, a, b):
     text = ""
     for letter in ciphertext:
         if letter.isalpha():
-        letter = letter.upper()
+            letter = letter.upper()
 
-        # FIXME: Use util.py to find the integer `num` that corresponds
-        # to the given letter
-        num = None
+            # FIXME: Use util.py to find the integer `num` that corresponds
+            # to the given letter
+            num = None
 
-        # FIXME: Decrypt the integer that corresponds to the current
-        # encrypted letter using the decryption function for an affine
-        # transformation with key (a, b) so that letter_digits holds
-        # the decrypted number as a string of two digits
-        letter_digits = 'None'
+            # FIXME: Decrypt the integer that corresponds to the current
+            # encrypted letter using the decryption function for an affine
+            # transformation with key (a, b) so that letter_digits holds
+            # the decrypted number as a string of two digits
+            letter_digits = 'None'
 
-        if len(letter_digits) == 1:
-            # FIXME: If the letter number is between 0 - 9, inclusive,
-            # prepend the string with a 0
-            letter_digits = None
+            if len(letter_digits) == 1:
+                # FIXME: If the letter number is between 0 - 9, inclusive,
+                # prepend the string with a 0
+                letter_digits = None
 
-        # FIXME: Use util.py to append to the text the decrypted
-        # letter corresponding to the current letter digits
-        text += 'None'
+            # FIXME: Use util.py to append to the text the decrypted
+            # letter corresponding to the current letter digits
+            text += 'None'
     return text
 
 
@@ -112,13 +115,13 @@ def rsa_encrypt(plaintext, n, e):
         encrypted_block = 'None'
 
         if len(encrypted_block) < l:
-        # FIXME: If the encrypted block contains less digits
-        # than the block size l, prepend the block with enough
-        # 0's so that the numeric value of the block
-        # remains the same, but the new block size is l,
-        # e.g. if l = 4 and encrypted block is '451' then prepend
-        # one 0 to obtain '0451'
-        encrypted_block = None
+            # FIXME: If the encrypted block contains less digits
+            # than the block size l, prepend the block with enough
+            # 0's so that the numeric value of the block
+            # remains the same, but the new block size is l,
+            # e.g. if l = 4 and encrypted block is '451' then prepend
+            # one 0 to obtain '0451'
+            encrypted_block = None
 
         # FIXME: Append the encrypted block to the cipher
         cipher += 'None'
@@ -161,13 +164,13 @@ def rsa_decrypt(cipher, p, q, e):
         decrypted_block = 'None'
 
         if len(decrypted_block) < l:
-        # FIXME: If the decrypted block contains less digits
-        # than the block size l, prepend the block with
-        # enough 0's so that the numeric value of the block
-        # remains the same, but the new block size is l,
-        # e.g. if l = 4 and decrypted block is '19' then prepend
-        # two 0's to obtain '0019'
-        decrypted_block = None
+            # FIXME: If the decrypted block contains less digits
+            # than the block size l, prepend the block with
+            # enough 0's so that the numeric value of the block
+            # remains the same, but the new block size is l,
+            # e.g. if l = 4 and decrypted block is '19' then prepend
+            # two 0's to obtain '0019'
+            decrypted_block = None
 
         # FIXME: Use util.py to append to text the decrypted block
         # transformed into letters
