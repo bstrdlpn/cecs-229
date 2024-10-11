@@ -13,6 +13,8 @@ def affine_encrypt(text, a, b):
     """
 
     # FIXME: raise an error if the gcd(a, 26) is not 1
+    if gcd(a, 26) !=1: 
+       raise ValueError
 
     cipher = ""
     for letter in text:
@@ -52,8 +54,9 @@ def affine_decrypt(ciphertext, a, b):
     :param b: int type; shift value
     :return: str type; the decrypted message as a string of uppercase letters
     """
-
-    a_inv = 0  # FIXME: complete this line so that a_inv holds the inverse of a under modulo 26
+    
+    # FIXME: complete this line so that a_inv holds the inverse of a under modulo 26
+    a_inv = mod_inv(a, 26)  
 
     text = ""
     for letter in ciphertext:
@@ -62,22 +65,22 @@ def affine_decrypt(ciphertext, a, b):
 
             # FIXME: Use util.py to find the integer `num` that corresponds
             # to the given letter
-            num = None
+            num = util.letters2digits(letter)
 
             # FIXME: Decrypt the integer that corresponds to the current
             # encrypted letter using the decryption function for an affine
             # transformation with key (a, b) so that letter_digits holds
             # the decrypted number as a string of two digits
-            letter_digits = 'None'
+            letter_digits = str((a_inv * (int(num) - b)) % 26)
 
             if len(letter_digits) == 1:
                 # FIXME: If the letter number is between 0 - 9, inclusive,
                 # prepend the string with a 0
-                letter_digits = None
+                letter_digits = '0' + str(letter_digits)
 
             # FIXME: Use util.py to append to the text the decrypted
             # letter corresponding to the current letter digits
-            text += 'None'
+            text += util.digits2letters(letter_digits)
     return text
 
 
@@ -177,3 +180,89 @@ def rsa_decrypt(cipher, p, q, e):
         text += 'None'
 
     return text
+
+""" ----------------- My Functions ----------------- """
+def mod_inv(a, m):
+  """
+    computes the inverse of a given integer a under a given modulo m
+    :param a: int type; the integer of interest
+    :param m: int type; the modulo
+    :returns: int type; the integer in range [0, m) that is the inverse of a under modulo m
+    :raises: ValueError if m < 0 or if a and m are not relatively prime
+    """
+  if m < 0:
+    raise ValueError(f"mod_inv(a, m) does not support negative modulo m = {m}")
+  g = gcd(a, m)
+  if g != 1:
+    raise ValueError(
+      f"mod_inv(a, m) does not support integers that are not relatively prime.\nGCD of {a} and {m} is {g}."
+    )
+  A = a
+  while A < 0:
+    # A is in range [0, m) and is equivalent to a under modulo m
+    A += m
+
+  # inverse of a under modulo m
+  inverse = bezout_coeffs(A, m).get(A)
+
+  while inverse < 0:
+
+    inverse += m
+
+  return inverse
+
+
+def bezout_coeffs(a, b):
+    """
+    Computes the Bezout coefficients of two given positive integers
+    :param a: int type; positive integer
+    :param b: int type; positive integer
+    :returns: dict type; a dictionary with parameters a and b as keys,
+              and their corresponding Bezout coefficients as values.
+    :raises: ValueError if a < 0 or b < 0
+    """
+    if a < 0 or b < 0:
+        raise ValueError("bezout_coeffs(a, b) does not support negative arguments.")
+    
+    # Store the original values of a and b for returning in the final dictionary
+    original_a, original_b = a, b
+    
+    # Initialize the coefficients
+    s0, t0 = 1, 0  # Coefficients for a
+    s1, t1 = 0, 1  # Coefficients for b
+    
+    # Extended Euclidean Algorithm to calculate gcd and coefficients
+    while b != 0:
+        q = a // b
+        
+        # Update a and b based on the remainder
+        a, b = b, a % b
+        
+        # From your notes, updating s1, t1, s0, t0 based on q
+        temp_s, temp_t = s1, t1
+        
+        # Update s1 and t1 using temp_s and temp_t (previous values)
+        s1 = s0 - temp_s * q
+        t1 = t0 - temp_t * q
+        
+        # Assign temp values to s0 and t0 for the next iteration
+        s0, t0 = temp_s, temp_t
+
+    # The coefficients s0 and t0 are now for original_a and original_b
+    return {original_a: s0, original_b: t0}
+
+
+def gcd(a, b):
+  """
+    computes the greatest common divisor of two given integers
+    :param a: int type;
+    :param b: int type;
+    :returns: int type; the gcd of a and b
+    """
+  A = abs(a)
+  B = abs(b)
+  if A == B:
+    return A
+  bez = bezout_coeffs(A, B)
+  # gcd(A, B) = s_k * A + t_k * B
+  return  sum(key * value for key, value in bez.items())
