@@ -100,10 +100,10 @@ def rsa_encrypt(plaintext, n, e):
 
     # FIXME: Use util.py to initialize 'digits' as a string of
     # the two-digit integers that correspond to the letters of 'text'
-    digits = 'None'
+    digits = util.letters2digits(text)
 
     # FIXME: Use util.py to initialize 'l' with the length of each RSA block
-    l = 0
+    l = util.blocksize(n)
 
     # FIXME: Use a loop to pad 'digits' with enough 23's (i.e. X's)
     # so that it can be broken up into blocks of length l
