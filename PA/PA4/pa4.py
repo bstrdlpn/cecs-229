@@ -1,4 +1,5 @@
 import math
+import numpy
 
 """ ----------------- PROBLEM 1 ----------------- """
 
@@ -25,10 +26,12 @@ def scale(S, k):
     :return: set type; a set consisting of points in S scaled by k
     :raise: raises ValueError if k <= 0
     """
-    scaled_set = {k * S for z in S}
-    # FIXME: Return correct output
-    #  return None
+    if k <= 0:
+        raise ValueError("k can not be <= 0")
+    
+    scaled_set = {k * z for z in S}
 
+    return scaled_set
 
 """ ----------------- PROBLEM 3 ----------------- """
 
@@ -43,9 +46,10 @@ def rotate(S, tau):
                 If zero, no rotation.
     :returns: set type; a set consisting of points in S rotated by tau radians
     """
-    # FIXME: Implement this function. 
-    # FIXME: Return correct output
-    return None
+    rotate = numpy.exp(1j * float(tau))
+    rotated_set = {z * rotate for z in S}
+    
+    return rotated_set
 
 
 """ ----------------- PROBLEM 4 ----------------- """
