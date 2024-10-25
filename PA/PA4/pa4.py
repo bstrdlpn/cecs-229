@@ -10,8 +10,8 @@ def translate(S, z0):
     :param z0: complex type; a complex number
     :return: set type; a set consisting of points in S translated by z0
     """
-    # FIXME: Implement this function
-    return None  # FIXME: Return correct output
+    translated_set = {z + z0 for z in S}
+    return translated_set
 
 
 """ ----------------- PROBLEM 2 ----------------- """
@@ -25,7 +25,7 @@ def scale(S, k):
     :return: set type; a set consisting of points in S scaled by k
     :raise: raises ValueError if k <= 0
     """
-    # FIXME: Implement this function.
+    scaled_set = {k * S for z in S}
     # FIXME: Return correct output
     #  return None
 
