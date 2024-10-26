@@ -46,8 +46,8 @@ def rotate(S, tau):
                 If zero, no rotation.
     :returns: set type; a set consisting of points in S rotated by tau radians
     """
-    rotate = numpy.exp(1j * float(tau))
-    rotated_set = {z * rotate for z in S}
+    rotate_by = numpy.exp(1j * float(tau))
+    rotated_set = {complex(round((z * rotate_by).real, 2), round((z * rotate_by).imag, 2)) for z in S}
     
     return rotated_set
 
@@ -69,9 +69,14 @@ class Vec:
         Overloads the built-in function abs(v)
         :returns: float type; the Euclidean norm of vector v
         """
-        # FIXME: Implement this method
-        # FIXME: Return correct output
-        return None
+        total = 0
+        
+        for x in self.elements:
+            total += x**2
+        
+        euclidean_norm = numpy.sqrt(total)
+
+        return euclidean_norm
 
     def __add__(self, other):
         """
@@ -79,9 +84,12 @@ class Vec:
         :raises: ValueError if vectors are not same length
         :returns: Vec type; a Vec object that is the sum vector of this Vec and 'other' Vec
         """
-        # FIXME: Finish the implementation
-        # FIXME: Return correct output
-        return None
+        if len(self.elements) != len(other.elements):
+            raise ValueError("Vectors are not the same length.")
+        else:
+            vector_sum = [u + v for u, v in zip(self.elements, other.elements)]
+        
+        return vector_sum
 
     def __sub__(self, other):
         """
@@ -89,9 +97,12 @@ class Vec:
         :raises: ValueError if vectors are not same length
         :returns: Vec type; a Vec object that is the difference vector of this Vec and 'other' Vec
         """
-        # FIXME: Finish the implementation
-        # FIXME: Return correct output
-        return None
+        if len(self.elements) != len(other.elements):
+            raise ValueError("Vectors are not the same length.")
+        else:
+            vector_diff = [numpy.subtract(u, v) for u, v in zip(self.elements, other.elements)]
+     
+        return vector_diff
 
     def __mul__(self, other):
         """
@@ -101,15 +112,21 @@ class Vec:
           - Vec * float (component-wise product); returns Vec object
           - Vec * int (component-wise product); returns Vec object
         """
-        if type(other) == Vec:  # define dot product
-            # FIXME: Complete the implementation
-            # FIXME: Return the correct output
-            return None
+        if type(other) == Vec:  # define dot product 
+            if len(self.elements) != len(other.elements):
+                raise ValueError("Vectors are not the same length.")
+            else:
+                dot_product = 0
+
+                for u, v in zip(self.elements, other.elements):
+                    dot_product += u * v
+
+            return dot_product
 
         elif type(other) == float or type(other) == int:  # scalar-vector multiplication
-            # FIXME: Complete the implementation
-            # FIXME: Return the correct output
-            return None
+            dot_product = [other * u for u in self.elements]
+            
+            return dot_product
 
     def __rmul__(self, other):
         """
