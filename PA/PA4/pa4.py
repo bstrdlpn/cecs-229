@@ -90,7 +90,7 @@ class Vec:
         if len(self.elements) != len(other.elements):
             raise ValueError("Vectors are not the same length.")
         else:
-            vector_sum = [u + v for u, v in zip(self.elements, other.elements)]
+            vector_sum = Vec([u + v for u, v in zip(self.elements, other.elements)])
 
         return vector_sum
 
@@ -104,7 +104,7 @@ class Vec:
         if len(self.elements) != len(other.elements):
             raise ValueError("Vectors are not the same length.")
         else:
-            vector_diff = [u -v for u, v in zip(self.elements, other.elements)]
+            vector_diff = Vec([u -v for u, v in zip(self.elements, other.elements)])
 
         return vector_diff
 
@@ -120,17 +120,12 @@ class Vec:
             if len(self.elements) != len(other.elements):
                 raise ValueError("Vectors are not the same length.")
             else:
-                dot_product = 0
-
-                for u, v in zip(self.elements, other.elements):
-                    dot_product += u * v
-
-            return dot_product
+                return sum(u * v for u, v in zip(self.elements, other.elements))
 
         elif type(other) == float or type(other) == int:  # scalar-vector multiplication
-            dot_product = [other * u for u in self.elements]
+            scalar = Vec([other * u for u in self.elements])
 
-            return dot_product
+            return scalar
 
     def __rmul__(self, other):
         """
@@ -138,9 +133,8 @@ class Vec:
               - float * Vec; returns Vec object
               - int * Vec; returns Vec object
         """
-        if type(other) is int or type(other) is float:
-            return self * other
-
+        if isinstance(other, (int, float)):
+            return Vec([other * u for u in self.elements])
 
     def __str__(self):
         """returns string representation of this Vec object"""
