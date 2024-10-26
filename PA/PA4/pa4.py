@@ -1,5 +1,4 @@
 import math
-import numpy
 
 """ ----------------- PROBLEM 1 ----------------- """
 
@@ -28,7 +27,7 @@ def scale(S, k):
     """
     if k <= 0:
         raise ValueError("k can not be <= 0")
-    
+
     scaled_set = {k * z for z in S}
 
     return scaled_set
@@ -38,17 +37,19 @@ def scale(S, k):
 
 def rotate(S, tau):
     """
-    rotates the complex numbers of set S by tau radians.  
+    rotates the complex numbers of set S by tau radians.
     :param S: set type; - set of complex numbers
-    :param tau: float type; radian measure of the rotation value. 
-                If negative, the rotation is clockwise.  
-                If positive the rotation is counterclockwise. 
+    :param tau: float type; radian measure of the rotation value.
+                If negative, the rotation is clockwise.
+                If positive the rotation is counterclockwise.
                 If zero, no rotation.
     :returns: set type; a set consisting of points in S rotated by tau radians
     """
-    rotate_by = numpy.exp(1j * float(tau))
-    rotated_set = {complex(round((z * rotate_by).real, 2), round((z * rotate_by).imag, 2)) for z in S}
-    
+    #rotate_by = numpy.exp(1j * float(tau))
+    rotate_by = math.exp(tau)**1j
+    rotated_set = {complex(round((z * rotate_by).real, 2),
+    round((z * rotate_by).imag, 2)) for z in S}
+
     return rotated_set
 
 
@@ -59,7 +60,8 @@ class Vec:
     def __init__(self, contents=[]):
         """
         Constructor defaults to empty vector
-        :param contents: list type; list of elements to initialize a vector object, defaults to empty list
+        :param contents: list type; list of elements to initialize a vector
+        object, defaults to empty list
         """
         self.elements = contents
         return
@@ -70,11 +72,11 @@ class Vec:
         :returns: float type; the Euclidean norm of vector v
         """
         total = 0
-        
+
         for x in self.elements:
             total += x**2
-        
-        euclidean_norm = numpy.sqrt(total)
+
+        euclidean_norm = math.sqrt(total)
 
         return euclidean_norm
 
@@ -82,26 +84,28 @@ class Vec:
         """
         overloads the + operator to support Vec + Vec
         :raises: ValueError if vectors are not same length
-        :returns: Vec type; a Vec object that is the sum vector of this Vec and 'other' Vec
+        :returns: Vec type; a Vec object that is the sum vector of this Vec and
+        'other' Vec
         """
         if len(self.elements) != len(other.elements):
             raise ValueError("Vectors are not the same length.")
         else:
             vector_sum = [u + v for u, v in zip(self.elements, other.elements)]
-        
+
         return vector_sum
 
     def __sub__(self, other):
         """
         overloads the - operator to support Vec - Vec
         :raises: ValueError if vectors are not same length
-        :returns: Vec type; a Vec object that is the difference vector of this Vec and 'other' Vec
+        :returns: Vec type; a Vec object that is the difference vector of this
+        Vec and 'other' Vec
         """
         if len(self.elements) != len(other.elements):
             raise ValueError("Vectors are not the same length.")
         else:
-            vector_diff = [numpy.subtract(u, v) for u, v in zip(self.elements, other.elements)]
-     
+            vector_diff = [u -v for u, v in zip(self.elements, other.elements)]
+
         return vector_diff
 
     def __mul__(self, other):
@@ -112,7 +116,7 @@ class Vec:
           - Vec * float (component-wise product); returns Vec object
           - Vec * int (component-wise product); returns Vec object
         """
-        if type(other) == Vec:  # define dot product 
+        if type(other) == Vec:  # define dot product
             if len(self.elements) != len(other.elements):
                 raise ValueError("Vectors are not the same length.")
             else:
@@ -125,7 +129,7 @@ class Vec:
 
         elif type(other) == float or type(other) == int:  # scalar-vector multiplication
             dot_product = [other * u for u in self.elements]
-            
+
             return dot_product
 
     def __rmul__(self, other):
@@ -134,9 +138,9 @@ class Vec:
               - float * Vec; returns Vec object
               - int * Vec; returns Vec object
         """
-        # FIXME: Complete the implementation
-        # FIXME: Return the correct output
-        return None
+        if type(other) is int or type(other) is float:
+            return self * other
+
 
     def __str__(self):
         """returns string representation of this Vec object"""
