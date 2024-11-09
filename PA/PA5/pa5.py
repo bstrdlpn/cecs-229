@@ -22,6 +22,7 @@ class Matrix:
 
     @property
     def cols(self):
+        return self.cols
         
     @rows.setter
     def rows(self, rows):
