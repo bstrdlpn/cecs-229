@@ -14,15 +14,44 @@ class Matrix:
         return
 
     """
-  INSERT MISSING SETTERS AND GETTERS HERE
-  """
+    INSERT MISSING SETTERS AND GETTERS HERE
+    """
+    @property
+    def rows(self):
+        return self.rows
+
+    @property
+    def cols(self):
+        
+    @rows.setter
+    def rows(self, rows):
+        if type(rows) is not list:
+            raise ValueError("Rows must be a list type.")
+        self.rows = rows
+
+    @cols.setter
+    def cols(self, cols):
+        if type(cols) is not list:
+            raise ValueError("Cols must be a list type.")
+        self.cols = cols
 
     def _construct_cols(self):
         """
         HELPER METHOD: Resets the columns according to the existing rows
         """
         self.cols = []
-        # FIXME: INSERT YOUR IMPLEMENTATION HERE
+        cols_list = []
+
+        # visualizing, is transpose of self.rows
+
+        for col_index in range(len(self.rows[0])):
+            new_col = []
+            for row in self.rows:
+                new_col.append(row[col_index])
+            cols_list.append(new_col)
+        
+        self.cols = cols_list
+        
         return
 
     def _construct_rows(self):
@@ -30,7 +59,16 @@ class Matrix:
         HELPER METHOD: Resets the rows according to the existing columns
         """
         self.rows = []
-        # FIXME: INSERT YOUR IMPLEMENTATION HERE
+        rows_list = []
+
+        for rows_index in range(len(self.cols[0])):
+            new_row = []
+            for col in self.cols:
+                new_row.append(col[rows_index])
+            rows_list.append(new_row)
+
+        self.rows =  rows_list
+        
         return
 
     def __add__(self, other):
@@ -65,7 +103,7 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
-        if type(other) == float or type(other) == int:
+        if type(other) == float or type(other) == int: 
             print("FIXME: Insert implementation of MATRIX-SCALAR multiplication"
                   )  # FIXME: REPLACE WITH IMPLEMENTATION
         elif type(other) == Matrix:
