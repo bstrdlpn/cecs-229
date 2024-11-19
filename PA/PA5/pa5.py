@@ -172,20 +172,23 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
+        # type check
+        if not isinstance(other, type(self)):
+            raise TypeError("Object not a matrix.")
+        
         # matrix dimensions
         self_m = len(self.rows)
         self_n = len(self.rows[0])
         other_m = len(other.rows)
         other_n = len(other.rows[0])
 
-        if not isinstance(other.rows, list):
-            raise TypeError("Object not a matrix.")
-        elif (self_m, self_n) != (other_m, other_n):
+        # dimension check
+        if (self_m, self_n) != (other_m, other_n):
             raise ValueError("Incompatible dimensions.")
-        else:
-            result = [[self.rows[i][j] + other.rows[i][j] for j in range(self_n)] for i in range(self_m)]
         
-        return result
+        result = [[self.rows[i][j] + other.rows[i][j] for j in range(self_n)] for i in range(self_m)]
+        
+        return type(self)(result)
 
     def __sub__(self, other):
         """
@@ -195,20 +198,23 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from Matrix - Matrix operation
         """
+        # type check
+        if not isinstance(other, type(self)):
+            raise TypeError("Object not a matrix.")
+
+        # matrix dimensions
         self_m = len(self.rows)
         self_n = len(self.rows[0])
         other_m = len(other.rows)
         other_n = len(other.rows[0])
 
-        if not isinstance(other.rows, list):
-            raise TypeError("Object not a matrix.")
-        elif (self_m, self_n) != (other_m, other_n):
+        if (self_m, self_n) != (other_m, other_n):
             raise ValueError("Incompatible dimensions.")
-        else:
-            result = [[self.rows[i][j] - other.rows[i][j] for j in range(self_n)] for i in range(self_m)]
 
-        return result
-        
+        result = [[self.rows[i][j] - other.rows[i][j] for j in range(self_n)] for i in range(self_m)]
+
+        return type(self)(result)
+
     def __mul__(self, other):
         """
         overloads the * operator to support
