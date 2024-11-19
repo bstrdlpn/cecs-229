@@ -14,63 +14,155 @@ class Matrix:
         return
 
     """
-    INSERT MISSING SETTERS AND GETTERS HERE
-    """
-    @property
-    def rows(self):
+  INSERT MISSING SETTERS AND GETTERS HERE
+  """
+    # Setters
+    def set_row(self, i, new_row):
+        """
+        Change the i-th row to be the list new_row and reconstruct the internal
+        column list.
+
+        :raises: ValueError; if new_row != matrix row length
+        """
+        index = i - 1
+        row_elements = len(self.rows[0])
+        if len(new_row) != row_elements:
+            raise ValueError("Incompatible row length.")
+        else:
+            self.rows[index] = new_row
+            self._construct_cols()
+
+    def set_col(self, j, new_col):
+        """
+        Change the j-th column to be the list new_col, and reconstruct the 
+        internal rows list.
+
+        :raises: ValueError; if new_col != matrix col length
+        """
+        index = j - 1
+        col_elements = len(self.rows)
+        if len(new_col) != col_elements:
+            raise ValueError("Incompatible column length.")
+        else:
+            self.cols[index] = new_col
+            self._construct_rows()
+
+    def set_entry(self, i, j, val):
+        """
+        Change the existing a_{ij} entry in the matrix to val.
+
+        :raises: IndexError; if i does not satisfy 1<=i<=m or j does not satisfy
+        1<=j<=n where m = num rows and n = num cols
+        """
+        num_rows = len(self.rows)
+        num_cols = len(self.rows[0])
+        index_row = i - 1
+        index_col = j - 1
+
+        if not (1 <= i <= num_rows) or not (1 <=j <= num_cols):
+            raise IndexError
+        else:
+            self.rows[index_row][index_col] = val
+            self._construct_rows()
+            self._construct_cols()
+
+    # Getters
+    def get_row(self, i):
+        """
+        Return the i-th row as a list.
+
+        :param i: int; index of row, start indexed at 1
+        :raises: IndexError if i does not satisfy 1<=i<=m
+        :return: list; row[i-1]
+        """
+        #if 1 <= i < len(self.rows):
+            #raise IndexError(f"i does not satisfy range 1<={i}<={len(self.rows)}")
+        return self.rows[i-1]
+
+    def get_col(self, j):
+        """
+        Return the j-th column as a list.
+
+        :param j: int; index of col, start indexed at 1
+        :raises: IndexError if j does not satisfy 1<=j<=n
+        :return: list; col[j-1]
+        """
+        #if 1 <= j <= len(self.cols):
+            #raise IndexError(f"j does not satisfy range 1<={j}<={len(self.cols)}")
+        return self.cols[j-1]
+
+    def get_rows(self):
+        """Return the list of lists that are the rows of the matrix obj."""
         return self.rows
-
-    @property
-    def cols(self):
+    
+    def get_columns(self):
+        """Return the list of lists that are the columns of the matrix obj."""
         return self.cols
-        
-    @rows.setter
-    def rows(self, rows):
-        if type(rows) is not list:
-            raise ValueError("Rows must be a list type.")
-        self.rows = rows
 
-    @cols.setter
-    def cols(self, cols):
-        if type(cols) is not list:
-            raise ValueError("Cols must be a list type.")
-        self.cols = cols
+    def get_diag(self, k):
+        """
+        Return the k-th diagonal of a matrix where k=0 returns the main 
+        diagonal, k>0 returns the diagonal beginning at a_{1(k+1)} and k<0 
+        returns the diagonal beginning at a_{(-k+1)1}. eg. get_diag(1) for an 
+        nxn matrix returns [a_{12},a_{23},a_{34},...,a_{(n-1)n}]
+
+        :param k: int; increments or decrements start index for diagonal
+        """
+        diag_list = []
+        num_rows = len(self.rows)
+        num_cols = len(self.rows[0])
+
+        if k >= 0:
+            for row_index in range(num_rows):
+                col_index = row_index + k
+                if col_index < num_cols:
+                    diag_list.append(self.rows[row_index][col_index])
+        else:
+            # values of k < 0
+            for col_index in range(num_cols):
+                row_index = col_index - k
+                if row_index < num_rows:
+                    diag_list.append(self.rows[row_index][col_index])
+
+        return diag_list
+
+
+    def get_entry(self, i, j):
+        return self.rows[i-1][j-1]
 
     def _construct_cols(self):
         """
         HELPER METHOD: Resets the columns according to the existing rows
         """
+        
+        """
         self.cols = []
         cols_list = []
-
-        # visualizing, is transpose of self.rows
-
-        for col_index in range(len(self.rows[0])):
+        
+        # number of rows in the new columns list
+        num_rows = len(self.rows[0])
+        
+        for col_index in range(num_rows):
             new_col = []
             for row in self.rows:
                 new_col.append(row[col_index])
             cols_list.append(new_col)
-        
+
         self.cols = cols_list
-        
-        return
+       """
+        self.cols = []
+        transpose = [list(row) for row in zip(*self.rows)]
+       
+        self.cols = transpose
 
     def _construct_rows(self):
         """
         HELPER METHOD: Resets the rows according to the existing columns
         """
         self.rows = []
-        rows_list = []
+        transpose = [list(row) for row in zip(*self.cols)]
 
-        for rows_index in range(len(self.cols[0])):
-            new_row = []
-            for col in self.cols:
-                new_row.append(col[rows_index])
-            rows_list.append(new_row)
-
-        self.rows =  rows_list
-        
-        return
+        self.rows = transpose
 
     def __add__(self, other):
         """
@@ -80,7 +172,20 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
-        pass  # FIXME: REPLACE WITH IMPLEMENTATION
+        # matrix dimensions
+        self_m = len(self.rows)
+        self_n = len(self.rows[0])
+        other_m = len(other.rows)
+        other_n = len(other.rows[0])
+
+        if not isinstance(other.rows, list):
+            raise TypeError("Object not a matrix.")
+        elif (self_m, self_n) != (other_m, other_n):
+            raise ValueError("Incompatible dimensions.")
+        else:
+            result = [[self.rows[i][j] + other.rows[i][j] for j in range(self_n)] for i in range(self_m)]
+        
+        return result
 
     def __sub__(self, other):
         """
@@ -90,8 +195,20 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from Matrix - Matrix operation
         """
-        pass  # FIXME: REPLACE WITH IMPLEMENTATION
+        self_m = len(self.rows)
+        self_n = len(self.rows[0])
+        other_m = len(other.rows)
+        other_n = len(other.rows[0])
 
+        if not isinstance(other.rows, list):
+            raise TypeError("Object not a matrix.")
+        elif (self_m, self_n) != (other_m, other_n):
+            raise ValueError("Incompatible dimensions.")
+        else:
+            result = [[self.rows[i][j] - other.rows[i][j] for j in range(self_n)] for i in range(self_m)]
+
+        return result
+        
     def __mul__(self, other):
         """
         overloads the * operator to support
@@ -104,7 +221,7 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
-        if type(other) == float or type(other) == int: 
+        if type(other) == float or type(other) == int:
             print("FIXME: Insert implementation of MATRIX-SCALAR multiplication"
                   )  # FIXME: REPLACE WITH IMPLEMENTATION
         elif type(other) == Matrix:
