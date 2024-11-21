@@ -227,12 +227,39 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
-        if type(other) == float or type(other) == int:
-            print("FIXME: Insert implementation of MATRIX-SCALAR multiplication"
-                  )  # FIXME: REPLACE WITH IMPLEMENTATION
-        elif type(other) == Matrix:
-            print("FIXME: Insert implementation of MATRIX-MATRIX multiplication"
-                  )  # FIXME: REPLACE WITH IMPLEMENTATION
+        if isinstance(other, (int, float)):
+            # SCALAR-MATRIX multiplication
+            self_m = len(self.rows)
+            self_n = len(self.rows[0])
+
+            result = [[self.rows[i][j] * other for j in range(self_n)] for i in range(self_m)]
+
+            return type(self)(result)
+
+        elif isinstance(other, Matrix):
+            print("FIXME: Insert implementation of MATRIX-MATRIX multiplication")
+            # MATRIX-MATRIX multiplication
+
+            # dimensions of matrices
+            self_m = len(self.rows)
+            self_k = len(self.rows[0])
+            other_k = len(other.rows)
+            other_n = len(other.rows[0])
+
+            # check matrix dimensions
+            if self_k != other_k:
+                raise ValueError("Matrix dimensions are incompatible.")
+            
+            # initialize empty matrix with dimensions (self_m x other_n)
+            result = [[0 for _ in range(other_n)] for _ in range(self_m)]
+            
+            for i in range(self_m):
+                for j in range(other_n):
+                    for k in range(self_k):
+                        result[i][j] += self.rows[i][k] + other.rows[k][j]
+            
+            return type(self)(result)
+
         elif type(other) == Vec:
             print("FIXME: Insert implementation for MATRIX-VECTOR multiplication"
                   )  # FIXME: REPLACE WITH IMPLEMENTATION
