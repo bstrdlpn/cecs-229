@@ -51,11 +51,14 @@ class Matrix:
         """
         Change the existing a_{ij} entry in the matrix to val.
 
+        :param i: int; index of row, indexed at 1
+        :param j: int; index of col, indexed at 1
+
         :raises: IndexError; if i does not satisfy 1<=i<=m or j does not satisfy
         1<=j<=n where m = num rows and n = num cols
         """
-        num_rows = len(self.rows)
-        num_cols = len(self.rows[0])
+        num_rows = len(self.get_rows())
+        num_cols = len(self.get_columns())
         index_row = i - 1
         index_col = j - 1
 
@@ -63,7 +66,6 @@ class Matrix:
             raise IndexError
         else:
             self.rows[index_row][index_col] = val
-            self._construct_rows()
             self._construct_cols()
 
     # Getters
@@ -109,8 +111,8 @@ class Matrix:
         :param k: int; increments or decrements start index for diagonal
         """
         diag_list = []
-        num_rows = len(self.rows)
-        num_cols = len(self.rows[0])
+        num_rows = len(self.get_rows())
+        num_cols = len(self.get_columns())
 
         if k >= 0:
             for row_index in range(num_rows):
@@ -177,10 +179,10 @@ class Matrix:
             raise TypeError("Object not a matrix.")
         
         # matrix dimensions
-        self_m = len(self.rows)
-        self_n = len(self.rows[0])
-        other_m = len(other.rows)
-        other_n = len(other.rows[0])
+        self_m = len(self.get_rows())
+        self_n = len(self.get_columns())
+        other_m = len(other.get_rows())
+        other_n = len(other.get_columns())
 
         # dimension check
         if (self_m, self_n) != (other_m, other_n):
@@ -203,10 +205,10 @@ class Matrix:
             raise TypeError("Object not a matrix.")
 
         # matrix dimensions
-        self_m = len(self.rows)
-        self_n = len(self.rows[0])
-        other_m = len(other.rows)
-        other_n = len(other.rows[0])
+        self_m = len(self.get_rows())
+        self_n = len(self.get_columns())
+        other_m = len(other.get_rows())
+        other_n = len(other.get_columns())
 
         if (self_m, self_n) != (other_m, other_n):
             raise ValueError("Incompatible dimensions.")
@@ -228,23 +230,21 @@ class Matrix:
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
         if isinstance(other, (int, float)):
-            # SCALAR-MATRIX multiplication
+            # MATRIX-SCALAR multiplication
             self_m = len(self.rows)
             self_n = len(self.rows[0])
 
-            result = [[self.rows[i][j] * other for j in range(self_n)] for i in range(self_m)]
+            result = [[round(self.rows[i][j] * other, 1) for j in range(self_n)] for i in range(self_m)]
 
             return type(self)(result)
 
         elif isinstance(other, Matrix):
-            print("FIXME: Insert implementation of MATRIX-MATRIX multiplication")
             # MATRIX-MATRIX multiplication
-
             # dimensions of matrices
-            self_m = len(self.rows)
-            self_k = len(self.rows[0])
-            other_k = len(other.rows)
-            other_n = len(other.rows[0])
+            self_m = len(self.get_rows())
+            self_k = len(self.get_columns())
+            other_k = len(other.get_rows())
+            other_n = len(other.get_columns())
 
             # check matrix dimensions
             if self_k != other_k:
@@ -256,13 +256,28 @@ class Matrix:
             for i in range(self_m):
                 for j in range(other_n):
                     for k in range(self_k):
-                        result[i][j] += self.rows[i][k] + other.rows[k][j]
+                        result[i][j] += self.rows[i][k] * other.rows[k][j]
             
             return type(self)(result)
 
-        elif type(other) == Vec:
-            print("FIXME: Insert implementation for MATRIX-VECTOR multiplication"
-                  )  # FIXME: REPLACE WITH IMPLEMENTATION
+        elif isinstance(other, Vec):
+            # dimensions of matrices
+            self_m = len(self.get_rows())
+            self_n = len(self.get_columns())
+            other_n = len(other)
+
+            if self_n != other_n:
+                raise ValueError("Matrix dimensions are incompatible.")
+
+            # initialize empty matrix with dimensions (self_m x 1)
+            result = [0 for _ in range(self_m)]
+
+            for i in range(self_m):
+                for j in range(other_n):
+                    result[i] = sum(self.rows[i][j] * other[j] for j in range(other_n))
+
+            return Vec(result)
+            
         else:
             raise TypeError(f"Matrix * {type(other)} is not supported.")
         return
@@ -277,9 +292,9 @@ class Matrix:
         :raises: TypeError if other is not of Matrix type
         :return: Matrix type; the Matrix object resulting from the Matrix + Matrix operation
         """
-        if type(other) == float or type(other) == int:
-            print("FIXME: Insert implementation of SCALAR-MATRIX multiplication"
-                  )  # FIXME: REPLACE WITH IMPLEMENTATION
+        if isinstance(other, (int, float)):
+            # MATRIX-SCALAR
+            return self.__mul__(other)
         else:
             raise TypeError(f"{type(other)} * Matrix is not supported.")
         return
