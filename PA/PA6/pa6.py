@@ -70,8 +70,20 @@ def rank(A : Matrix):
     returns the rank of the given Matrix object
     as an integer
     """
-    # TODO: implement this function
-    pass
+    B = Matrix(copy.deepcopy(A.rows))
+    B_ref = _ref(B)
+    B_ref = B_ref.get_rows()
+
+    rank = 0
+    
+    for sublist in B_ref:
+        result = 0
+        for element in sublist:
+            result += element
+        if result != 0:
+            rank += 1
+    
+    return rank
 
 
 """ ----------------- PROBLEM 4 ----------------- """
