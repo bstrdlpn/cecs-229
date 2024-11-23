@@ -129,8 +129,6 @@ class Vec:
       return z * hash(key) % (2 ** w) >> (w - d)
 
 
-""" ----------------- MATRIX CLASS ----------------- """
-
 class Matrix:
   
     def __init__(self, rows=[]):
