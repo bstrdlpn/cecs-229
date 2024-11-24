@@ -47,9 +47,9 @@ def _ref(A : Matrix):
             B.set_row(k, row_p)
   
         pivot = B.get_entry(k, j)
-        new_row = [element * (1/pivot) for element in B.get_row(k)]
-      
-        B.set_row(k, new_row)
+        if abs(pivot) > 1e-10:
+            new_row = [element / pivot for element in B.get_row(k)]
+            B.set_row(k, new_row)
   
         # reducing the rows below row k by a scalar multiple of row k
         for i in range(k + 1, m + 1): 
@@ -91,24 +91,54 @@ def rank(A : Matrix):
 
 def gauss_solve(A : Matrix, b : Vec):
     """
-    returns the Row Echelon Form of the Matrix A
-    :param A: Matrix type
-    :returns: Matrix type; distinct Matrix object that is the
-              Row-Echelon Form of A
+    returns the solution to the system Ax = b if the system has a solution. If 
+    the system does not have a solution, None is returned. If the system has 
+    infinitely-many solutions, the number of free variables as an 'int' is 
+    returned.
+
+    :param A:   Matrix type; the matrix of coefficients of the system of equations
+    :param b:   Vec object; the vector of constants in the system of equations
+
+    :returns:   
+              - None; if the system does not have a solution
+              - int type; if the system has infinitely many solutions, the 
+                number of free variables is returned
+              - Vec type; the vector solution of the system if it has a solution
     """
+    # the augmented matrix
     new_cols = copy.deepcopy(A.cols)
     new_cols.append(b.elements)
-  
     Ag = Matrix(new_cols).transpose()
+
+    # ranks of A and Ag
     Arank = rank(A)
     Agrank = rank(Ag)
     m, n = A.dim()
-    if Arank != Agrank:
-        pass # FIXME: Replace with your implementation
-    elif Arank < n:
-        pass # FIXME: Replace with your implementation
-    else:
-        pass # FIXME: Replace with your implementation
+
+    if Arank != Agrank: # no solution
+        return None
+    elif Arank < n: # infinitely many solutions
+        # number of free variables = num of cols in A - Arank
+        return n - Arank
+    else: # unique solution, return type 'Vec'
+        Ag_ref = _ref(Ag)
+
+        solution = [0] * n
+
+        # back sub
+        for i in range(n, 0, -1):
+            row_index = i - 1
+            rhs = Ag_ref.get_entry(i, n + 1)
+
+            for j in range(i + 1, n + 1):
+                col_index = j - 1
+                rhs -= Ag_ref.get_entry(i, j) * solution[col_index]
+
+            solution[row_index] = rhs / Ag_ref.get_entry(i, i)
+
+        return Vec(solution)
+    
+
 
 
 """ ----------------- PROBLEM 5 ----------------- """
@@ -116,14 +146,9 @@ def gauss_solve(A : Matrix, b : Vec):
 
 def gram_schmidt(S : set):
     """
-    returns the solution to the system Ax = b
-    :param A: Matrix type; the matrix of coefficients in the system of equations
-    :param b: Vec type; the vector of constants in the system of equations
-    :returns:
-              - None type if the system does not have a solution
-              - int type; if the system has infinitely-many solutions, the number of free
-                          variables is returned
-              - Vec type; the vector solution of the system if it has a unique solution
+    returns the orthonormal basis of given set S
+    :param S: set type; a set of linearly independent 'Vec' objects
+    :returns: an orthonormal set of 'Vec' objects
     """
     # TODO: Implement this function
     pass
