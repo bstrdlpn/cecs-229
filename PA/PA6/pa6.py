@@ -32,6 +32,7 @@ def _ref(A : Matrix):
     B = Matrix(copy.deepcopy(A.rows))
     m, n = B.dim()
     k = 1  # initializing the row-index of where to begin searching for the pivot
+
     for j in range(1, n + 1):
         
         p = _pivot_idx(k, j, B) # gets the index of the pivot at column j
@@ -47,7 +48,7 @@ def _ref(A : Matrix):
             B.set_row(k, row_p)
   
         pivot = B.get_entry(k, j)
-        if abs(pivot) > 1e-10:
+        if abs(pivot) > 1e-10: # check if non-zero
             new_row = [element / pivot for element in B.get_row(k)]
             B.set_row(k, new_row)
   
@@ -74,13 +75,13 @@ def rank(A : Matrix):
     B_ref = _ref(B)
     B_ref = B_ref.get_rows()
 
+    # floating point tolerance, anything greater than this is non-zero
+    tolerance = 1e-10
     rank = 0
     
     for sublist in B_ref:
-        result = 0
-        for element in sublist:
-            result += element
-        if result != 0:
+        # checks if each element in the sublist is nonzero
+        if any(abs(num) > tolerance for num in sublist):
             rank += 1
     
     return rank
@@ -150,9 +151,32 @@ def gram_schmidt(S : set):
     :param S: set type; a set of linearly independent 'Vec' objects
     :returns: an orthonormal set of 'Vec' objects
     """
-    # TODO: Implement this function
-    pass
+    
+    solution = [] # store the orthonormal vectors
 
+    S = list(S)
+
+    # initialize 
+    w = S[0]
+    u1 = (1/norm(w, 2)) * w
+    solution.append(u1)
+    del S[0]
+
+    while S:
+        w = S[0]
+
+        # subtract projections onto all previous vectors for u in solution
+        for u in solution:
+            # proj_u(w) = (w*u)/(u*u) * u
+            # u already normalized, so u*u = 1 so instead:
+            w = w - (w * u) * u
+
+        # normalize the vector
+        uk = (1/norm(w, 2)) * w
+        solution.append(uk)
+        del S[0]
+
+    return set(solution)
 
 """ ----------------- HELPER METHOD ----------------- """
 
